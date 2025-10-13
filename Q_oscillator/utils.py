@@ -31,11 +31,26 @@ def keysight_unc(v_div, dc_vo=0):
 def meterman37xr_unc(reading: str, mode="V"):
     whole, dec = reading.split(".")
     sig = 10 ** (-len(dec))
+    
+    #Voltage Uncertainty
     if mode == "V":
         return 0.001 * float(reading) + 5 * sig
+    
+    #Resistance Uncertainty
 
     if mode == "R":
-        return 0.005 * float(reading) + 8 * sig
+        return 0.005 * float(reading) + 4 * sig
+    
+    #Inductance Uncertainty
+    
+    if mode == "I":
+        return 0.05 * float(reading) + 30 * sig
+    
+    
+    #Capacitance Uncertainty
+    
+    if mode == "C":
+        return 0.03 * float(reading) + 5 * sig
 
 
 print(meterman37xr_unc("520.1", "R"))
