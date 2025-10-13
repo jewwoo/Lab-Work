@@ -54,6 +54,50 @@ def meterman37xr_unc(reading: str, mode="V"):
 
 
 print(meterman37xr_unc("520.1", "R"))
+import numpy as np
+
+
+def freq_uncertainty(f_reading, lsb, ppm=50):
+    """
+    Calculate combined and relative uncertainties of frequency measurements
+    from a Keysight 1000 X-Series oscilloscope.
+
+    Parameters
+    ----------
+    f_reading : float or array-like
+        Frequency reading(s) from the oscilloscope (in Hz).
+    lsb : float or array-like
+        Least significant digit(s) of each reading (in Hz).
+    ppm : float, optional
+        Timebase accuracy in parts per million (default = 50 ppm).
+
+    Returns
+    -------
+    u_combined : ndarray
+        Combined uncertainty in Hz.
+    rel_uncertainty : ndarray
+        Relative uncertainty in percent.
+    """
+
+    f = np.array(f_reading, dtype=float)
+    lsb = np.array(lsb, dtype=float)
+
+    u_tb = f * (ppm * 1e-6)       # timebase term
+    u_disp = 0.5 * lsb            # display term
+    u_combined = np.sqrt(u_tb**2 + u_disp**2)
+    rel_uncertainty = (u_combined / f) * 100
+
+    return u_combined, rel_uncertainty
+
+
+# Example usage
+frequencies = [10000, 5000, 15000]  # in Hz
+lsbs = [1, 1, 1]                    # each with 1 Hz resolution
+u, rel = freq_uncertainty(frequencies, lsbs)
+
+for f, u_i, r_i in zip(frequencies, u, rel):
+    print(f"{f/1000:.3f} kHz ± {u_i:.2f} Hz ({r_i:.5f}%)")
+
 
 
 # Plot residuals function
