@@ -134,3 +134,60 @@ def format_parameters_with_errors(parameters, errors):
         formatted_values.append(f"{rounded_param} ± {rounded_err}")
 
     return formatted_values
+
+
+import numpy as np
+
+def amplitude_ratio_uncertainty(Vout, Vin, u_Vout, u_Vin, return_db=False):
+    """
+    Uncertainty of amplitude ratio R = Vout / Vin (assumes independence).
+    If return_db=True, also returns R_dB and its uncertainty.
+    """
+    Vout, Vin = np.asarray(Vout, float), np.asarray(Vin, float)
+    u_Vout, u_Vin = np.asarray(u_Vout, float), np.asarray(u_Vin, float)
+
+    R = Vout / Vin
+    u_R = R * np.sqrt( (u_Vout/np.maximum(Vout, 1e-300))**2 +
+                       (u_Vin /np.maximum(Vin , 1e-300))**2 )
+
+    if not return_db:
+        return R, u_R
+
+    R_dB = 20*np.log10(np.maximum(R, 1e-300))
+    u_R_dB = (20/np.log(10)) * (u_R / np.maximum(R, 1e-300))
+    return R, u_R, R_dB, u_R_dB
+
+
+def combine_x_uncert_into_y(f, u_f, model, params, u_y_from_volt):
+    """
+    Map frequency uncertainty into vertical uncertainty via model slope and
+    add in quadrature with the measurement (voltage-based) vertical uncertainty.
+
+    Parameters
+    ----------
+    f : array-like (Hz)
+    u_f : array-like (Hz)  - from your freq_uncertainty() function
+    model : callable       - M(f, *params) returning the modeled amplitude ratio
+    params : tuple/list    - parameters for the model
+    u_y_from_volt : array-like - vertical uncertainty from voltages (u_R)
+
+    Returns
+    -------
+    u_y_total : ndarray
+        sqrt( u_R^2 + (dM/df * u_f)^2 )
+    """
+
+    f = np.asarray(f, float)
+    u_f = np.asarray(u_f, float)
+    u_y_from_volt = np.asarray(u_y_from_volt, float)
+
+    # numerical derivative dM/df using a small relative step
+    eps = 1e-6
+    df = np.maximum(eps * np.maximum(np.abs(f), 1.0), 1.0)  # at least 1 Hz step
+    M_plus  = model(f + df, *params)
+    M_minus = model(f - df, *params)
+    dM_df = (M_plus - M_minus) / (2*df)
+
+    u_y_from_x = np.abs(dM_df) * u_f
+    u_y_total = np.sqrt(u_y_from_volt**2 + u_y_from_x**2)
+    return u_y_total
