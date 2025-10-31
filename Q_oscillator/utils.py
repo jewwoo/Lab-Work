@@ -10,6 +10,7 @@ plotpath = root / "plots"
 
 def keysight_unc(v_div, dc_vo=0):
     """
+    Function that calculates the voltage uncertainty of a Keysight 1000 X-Series oscilloscope
     v_div: volts per division
     dc_vo: dc vertical offset
     """
@@ -29,6 +30,7 @@ def keysight_unc(v_div, dc_vo=0):
 
 
 def meterman37xr_unc(reading: str, mode="V"):
+    "Function that calculates the uncertainty of a Meterman 37XR multimeter"
     whole, dec = reading.split(".")
     sig = 10 ** (-len(dec))
     
@@ -53,8 +55,7 @@ def meterman37xr_unc(reading: str, mode="V"):
         return 0.03 * float(reading) + 5 * sig
 
 
-print(meterman37xr_unc("520.1", "R"))
-import numpy as np
+
 
 
 def freq_uncertainty(f_reading, lsb, ppm=50):
