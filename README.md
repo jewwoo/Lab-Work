@@ -12,19 +12,32 @@ The goal is to keep everything **reproducible**: raw data is stored alongside th
 ## Repo Organization
 
 Lab-Work/
+
 ├── Currents_in_LCR/
+
 │ ├── Data/ # raw/processed circuit data (scope exports, etc.)
+
 │ ├── e1_analysis.ipynb # Exercise 1 analysis
+
 │ ├── e2_analysis.ipynb # Exercise 2 analysis
+
 │ ├── e3_analysis.ipynb # Exercise 3 analysis
+
 │ ├── utils.py # helper functions (fits, uncertainty, plotting, etc.)
+
 │ └── Report_CurrentsinLCR.pdf # compiled report
+
 │
 └── Q_oscillator/
+
 ├── data/ # raw/processed oscillator data
+
 ├── Q_oscillator.ipynb # main analysis notebook
+
 ├── utils.py # helper functions for this module
+
 └── *.png # exported figures (fits, residuals, etc.)
+
 
 
 Notes:
