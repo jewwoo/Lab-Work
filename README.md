@@ -36,7 +36,9 @@ Lab-Work/
 
 ├── utils.py # helper functions for this module
 
-└── *.png # exported figures (fits, residuals, etc.)
+├── Q_Oscillator.tex
+
+└── Q_Oscillator.pdf
 
 
 

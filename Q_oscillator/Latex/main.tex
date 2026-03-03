@@ -1,0 +1,440 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Journal Article
+% LaTeX Template
+% Version 2.0 (February 7, 2023)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Author:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+% NOTE: The bibliography needs to be compiled using the biber engine.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	a4paper, % Paper size, use either a4paper or letterpaper
+	10pt, % Default font size, can also use 11pt or 12pt, although this is not recommended
+	% unnumberedsections, % Comment to enable section numbering
+	twoside, % Two side traditional mode where headers and footers change between odd and even pages, comment this option to make them fixed
+]{journal}
+
+\addbibresource{refs.bib} % BibLaTeX bibliography file
+
+\runninghead{PHY324 Blackbody Radiation} % A shortened article title to appear in the running head, leave this command empty for no running head
+
+\footertext{\textit{\today}} % Text to appear in the footer, leave this command empty for no footer tex
+
+\setcounter{page}{1} % The page number of the first page, set this to a higher number if the article is to be part of an issue or larger work
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{\textcolor{bluehead}{Characterizing Resonance Behavior in Electronic and Mechanical Oscillators}} % Article title, use manual lines breaks (\\) to beautify the layout
+
+% Authors are listed in a comma-separated list with superscript numbers indicating affiliations
+% \thanks{} is used for any text that should be placed in a footnote on the first page, such as the corresponding author's email, journal acceptance dates, a copyright/license notice, keywords, etc
+\author{%
+    Julian Woo\thanks{julian.woo@mail.utoronto.ca}  \; and Mohamed Mostafa\thanks{mohd.mostafa@mail.utoronto.ca}
+}
+% Affiliations are output in the \date{} command
+\date{\small PHY324 University of Toronto}
+
+% Full-width abstract
+
+%----------------------------------------------------------------------------------------
+\input{consts}
+\renewcommand{\maketitlehookd}{%
+	\begin{abstract}
+        In this experiment, we tested how well an incandescent tungsten filament approximates a blackbody emitter by measuring its light spectrum over a range of temperatures. We used a prism-based spectrophotometer to record the bulb’s intensity distribution at different applied voltages and calculated filament temperatures from its electrical resistance. By fitting the peak wavelength of each measured spectrum, we confirmed that the peak emission shifts with temperature in a manner consistent with Wien’s Displacement Law, but we overestimate the Wien constant as $(3.8 \pm 0.3)\unit{m \cdot K}$. Our results also showed that the overall emission increases exponentially with temperature at a rate of $T^{4.62 \pm 0.02}$ in comparison with the $T^4$ dependence predicted by the Stefan-Boltzmann Law 
+	\end{abstract}
+}
+\begin{document}
+
+\maketitle % Output the title section
+
+
+
+
+\section{Introduction}
+
+
+Oscillatory motion is a fundamental phenomena in physics. An oscillator is any system that experiences a restoring force when displaced from equilibrium, causing it to move back and forth about a stable point. An example is the \textit{mass--spring system}, where Hooke’s law 
+\begin{equation}
+F = -kx
+\end{equation}
+defines a restoring force proportional to the displacement $x$, with proportionality constant $k$ called the spring constant. Applying Newton’s second law $F = ma = m\,d^2x/dt^2$, the equation of motion for an ideal, undamped oscillator is 
+\begin{equation}
+m\frac{d^2x}{dt^2} + kx = 0
+\label{eq:undamped}
+\end{equation}
+where $m$ is the mass of the oscillating body. Equation~(\ref{eq:undamped}) has the general solution 
+\begin{equation}
+x(t) = A\cos(\omega_0 t + \phi)
+\end{equation}
+where $A$ is the amplitude, $\phi$ is the phase constant, and the natural angular frequency is 
+\begin{equation}
+\omega_0 = \sqrt{\frac{k}{m}}.
+\end{equation}
+This frequency represents how fast the system oscillates when undisturbed by friction or external forces.  
+
+\subsection{Damping and Energy Loss}
+In reality, oscillators lose energy over time due to friction, air resistance, or internal resistance. These losses are collectively referred to as \textit{damping}. A simple way to include damping in the model is to assume that the resistive force is proportional to the velocity of the mass:
+\begin{equation}
+F_d = -b\frac{dx}{dt}
+\end{equation}
+where $b$ is the damping constant. The resulting equation of motion becomes
+\begin{equation}
+m\frac{d^2x}{dt^2} + b\frac{dx}{dt} + kx = 0.
+\label{eq:damped}
+\end{equation}
+Depending on the relative strength of $b$, the system may be \textit{underdamped}, \textit{critically damped}, or \textit{overdamped}. In the underdamped case, which is most relevant to this experiment, the system still oscillates but with a gradually decaying amplitude. The solution can be written as
+\begin{equation}
+x(t) = A e^{-\gamma t} \cos(\omega_d t + \phi)
+\end{equation}
+where $\gamma = b/(2m)$ is the damping coefficient and $\omega_d = \sqrt{\omega_0^2 - \gamma^2}$ is the damped angular frequency. The exponential term describes the decay of amplitude over time, indicating the rate at which energy dissipates from the system.  
+
+\subsection{Driven  Oscillations and Resonance}
+To sustain oscillation despite damping, an external driving force is applied, typically sinusoidal in form:
+\begin{equation}
+F(t) = F_0 \cos(\omega t)
+\end{equation}
+where $F_0$ is the driving amplitude and $\omega$ is the driving angular frequency. Incorporating this into the equation of motion gives
+\begin{equation}
+m\frac{d^2x}{dt^2} + b\frac{dx}{dt} + kx = F_0 \cos(\omega t).
+\label{eq:forced}
+\end{equation}
+The steady-state solution describes an oscillation at the same frequency as the driving force but with a different amplitude $A$ and phase shift $\phi$:
+\begin{equation}
+x(t) = A(\omega)\cos(\omega t + \phi).
+\end{equation}
+The amplitude as a function of frequency is given by
+\begin{equation}
+A(\omega) = \frac{F_0/m}{\sqrt{(\omega_0^2 - \omega^2)^2 + (2\gamma\omega)^2}}.
+\label{eq:amplitude}
+\end{equation}
+Equation~(\ref{eq:amplitude}) shows that the amplitude reaches a maximum when $\omega \approx \omega_0$, a condition known as \textit{resonance}. Resonance occurs when the driving frequency matches the system’s natural frequency, allowing maximum energy transfer from the driver to the oscillator.  
+
+\subsection{The Quality Factor Q}
+The \textit{quality factor}, or $Q$, quantifies how ``sharp'' or ``selective'' this resonance is and provides a measure of energy retention versus loss per cycle. Conceptually, a system with a high $Q$ oscillates longer before its energy dissipates; a low-$Q$ system loses energy quickly. Mathematically, the quality factor is defined as 
+\begin{equation}
+Q = 2\pi \times \frac{\text{Energy stored}}{\text{Energy lost per cycle}}.
+\end{equation}
+For a lightly damped oscillator, this can be expressed in terms of system parameters as
+\begin{equation}
+Q = \frac{m\omega_0}{b} = \frac{\omega_0}{2\gamma}.
+\end{equation}
+Alternatively, when resonance is measured experimentally from amplitude--frequency data, the $Q$ factor is determined by the ratio of the resonant frequency $\omega_0$ to the full width at half maximum (FWHM) $\Delta\omega$ of the resonance peak:
+\begin{equation}
+Q = \frac{\omega_0}{\Delta\omega}.
+\label{eq:qdefinition}
+\end{equation}
+This relationship allows direct comparison between theoretical predictions and experimental measurements for both electrical and mechanical systems.  
+
+\subsection{Electrical and Mechanical Analogies}
+The same mathematics that describe mechanical oscillators also apply to electrical systems composed of inductors, capacitors, and resistors---known as \textit{LCR circuits}. In an LCR circuit, the charge $q$ on the capacitor obeys an analogous differential equation:
+\begin{equation}
+L\frac{d^2q}{dt^2} + R\frac{dq}{dt} + \frac{q}{C} = V_0 \cos(\omega t)
+\label{eq:lcr}
+\end{equation}
+where $L$ is the inductance, $R$ the resistance, $C$ the capacitance, and $V_0$ the driving voltage amplitude. Here, the mechanical quantities $m$, $b$, and $k$ correspond to $L$, $R$, and $1/C$ respectively. Thus, the current $I = dq/dt$ behaves analogously to the velocity of the mass, and the voltage corresponds to force.  
+
+Just as with a mechanical oscillator, the LCR circuit exhibits a resonance peak at
+\begin{equation}
+\omega_0 = \frac{1}{\sqrt{LC}},
+\end{equation}
+and its quality factor is
+\begin{equation}
+Q = \frac{\omega_0 L}{R} = \frac{1}{R}\sqrt{\frac{L}{C}}.
+\end{equation}
+The electrical setup therefore provides a convenient and precise way to measure resonance and damping electronically before exploring analogous effects in a mechanical system such as a \textit{tuning fork oscillator}, which converts magnetic and mechanical energy in similar fashion.  
+
+\subsection{Purpose and Context}
+The study of oscillators and their quality factors is central to understanding how systems store and dissipate energy---concepts that extend from radio circuits to seismology and quantum physics. In this experiment, we investigate the behavior of both an electrical LCR circuit and a mechanical tuning fork oscillator to determine their respective quality factors and to explore how resistance and friction influence energy loss and resonance width. By comparing the results from two distinct physical systems governed by equivalent mathematical frameworks, we gain insight into the universal nature of resonance and damping.
+
+
+\section{Methods and Procedures}
+
+\subsection{Exercise 1: Electronic Oscillator}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{imgs/circuit ex1.png}
+    \caption{Experimental Setup for Exercise 1. circuit with a wave generator (far left) Inductor (L), Capacitor (C) and resistor (R) in series, and an oscilloscope in parallel (far right)}
+    \label{fig:expsetup}
+\end{figure}
+
+In this experiment, using an Oscilloscope (Keysight DSOX-1202G), 10 nF Capacitor, 1 \unit{k\Omega} resistor, and a 114 mH inductor we built the circuit shown in Figure \ref{fig:expsetup}. Then we measured the Capacitance, inductance, and resistance of each component, as seen in the table below:
+
+
+\begin{table}[h]
+    \centering
+    \resizebox{0.6\columnwidth}{!}{
+        \begin{tabular}{lc}
+            \toprule
+          
+            Capacitor  ($C$) &  $9.9 \cdot 10^{-9}  \pm 3 \cdot 10^{-10} F$ \\
+            Inductor ($L$) & $ 0.114 \pm 0.009$ H \\
+            Resistor  ($R$) & $1073 \Omega   \pm 6$ $\Omega$ \\
+        
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Measured Component Values}
+    \label{tab:component_values}
+\end{table}
+
+We then drove the LCR circuit with a square wave and measured the oscillation frequency after each transition of the square wave. 
+
+Then we used the signal generator to generate sine waves, and starting at 200 Hz, ending at 6000Hz and going up in 250Hz increments, we measure the actual frequency (not the setting), Input voltage (voltage around the whole circuit) and its uncertainty, the output voltage (voltage across only the resistor) and its uncertainty, and the phase and its uncertainty using the oscilloscopes measure settings for phase, and amplitude. We repeated these measurements for each Frequency value.
+
+After this and logging between what two values of frequency the highest output voltage lies, we then used a value right below the lower bound as the starting point (4750Hz) and the upper bound as the ending (5000Hz), and went up in 25Hz increments to find the resonant frequency more accurately, and we noted down the highest value of output voltage. We also repeated the earlier measurements for each Frequency value.
+
+
+\subsection{Exercise 2: Mechanical Oscillator}
+
+The capacitor and resistor were removed and only the inductor was kept in the circuit. We then set the oscilloscope to 2 seconds per division and hit the tuning fork with a solid object with high force. When the screen updated and there was enough time periods visible to show the decay clearly, we clicked the stop/run button to pause the measurements and exported the data to a usb. 
+
+We then connected the signal generator to the driving coil that is between the tuning fork ends, and repeated the same steps as for exercise 1, measuring the input voltage from the pickup coil for each frequency, the phase and the output voltage of the signal generator. We started at 200 Hz, ended at 6000Hz and went up in 200Hz increments, and then to find the resonant frequency more accurately, we then used a value right below the lower bound as the starting point (4750Hz) and the upper bound as the ending (5000Hz), and went up in 25Hz increments.
+
+
+
+
+\section{Analysis and Discussion}
+We seek to corroborate Wien's Displacement Law and the Stefan-Boltzmann Law by examining the intensity spectrum of an incandescent tungsten filament light bulb using a prism spectrophotometer as the bulb voltage is varied within the range $4\unit{V}$ to $10\unit{V}$. The color from the bulb was observed to go from a warm amber to a bright yellow with increasing bulb voltage. Further, the diffracted light was seen to produce a rainbow on the light sensor mask with colors ranging from blue to red. The ambient temperature of the room was determined to be $T_R = \roomTemp$. White and Minges provide a 4th-order fit for the resistivity of tungsten in the range 100K to 3600K given by $\rho(T) = \sum_{n = 0}^4A_n(T/1000)^n$ achieving an rms deviation of 0.2\% \autocite{White_Minges_1997}. The $A_n$ coefficients are given in the appendix. From this, we determine $\alpha_0(T_R)$ using equation \ref{eqn:alpha0} with $\rho$ in place of $R$ to get $\alpha_0(T_R) = \alphaNought$. Calculation details are provided in Appendix Section \ref{appendix:white-minges-fit-parameters}.  With this, the bulb voltage and bulb current readings are converted to bulb temperatures using equation \ref{eqn:T(V,I)}. The bulb temperature was found to increase with bulb voltage, going from $(2380 \pm 30)\unit{K}$ at 4V to $(3520 \pm 30)\unit{K}$ at 10V.
+
+\subsection{Electrical Oscillator Analysis}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{imgs/Underdamped LCR.png}
+    \includegraphics[width=0.8\linewidth]{imgs/usbdataplotresiduals.png}
+    \caption{
+    (Top) Measured voltage response of the underdamped LCR circuit  following a square-wave transition, fitted with the underdamped model 
+    $V(t) = A e^{-t/\tau}\cos(\omega t + \phi) + C$ . 
+    The best-fit parameters are $\tau = (0.167 \pm 0.012)\,\mathrm{ms}$, 
+    $f_0 = (4812 \pm 55)\,\mathrm{Hz}$, and $Q = 2.52 \pm 0.18$. 
+    The fit achieves a reduced chi-squared value of $\chi^2_{\mathrm{red}} = 0.87$ 
+    with 275 degrees of freedom,
+    (Bottom) Residuals of the fit showing random scatter about zero.
+    }
+    \label{fig:underdamped_LCR}
+\end{figure}
+
+
+
+For \emph{Exercise 1}, we first  drove the series $RLC$ with a square wave to verify that we have an underdamped wave, then  used the oscilloscope’s wave generator to measure the amplitude ratio $H_a(f)=V_R/V_{\text{in}}$ and the phase $\theta(f)$ across the resistor.
+
+
+For the transient check, we drove the series $RLC$ with a square wave to confirm it was underdamped and to obtain a estimate of $f_0$ and $Q$. We then Fit the underdamped model  to obtain $\tau$ and $f_0$, 
+For the underdamped oscillator, the response is well described by
+\[
+V(t)=A\,e^{-t/\tau}\cos(\omega t+\phi)+C,
+\]
+so $\tau$ captures dissipation directly while $f_0$ cross-checks the resonance used in the frequency sweep.
+
+Fitting the waveform in Fig. \ref{fig:underdamped_LCR} (top) gives
+\[
+\begin{aligned}
+\tau  &= (0.167 \pm 0.012)\ \text{ms} \\
+f_{0} &= (4812 \pm 55)\ \text{Hz} \\
+Q     &= 2.52 \pm 0.18
+\end{aligned}
+\]
+
+with $\chi^2_\text{red}=0.87$ for 275 dof. Residuals (Fig.\ref{fig:underdamped_LCR}) are random about zero, indicating the model is adequate.
+The circuit is clearly underdamped; $f_{0,\text{ring}}\!\approx\!4.81$ kHz is consistent with the later sweep; and $Q$ value near $2.5$ sets expectations for what we might expect later
+
+\subsection{Amplitude Ratio vs Frequency}
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.8\linewidth]{imgs/amplituderatio_ex1.png}
+    \includegraphics[width=0.8\linewidth]{imgs/amp_ratio_residual.png}
+
+    \caption{\textbf{Top)} Measured amplitude ratio $V_R/V_{\text{in}}$  versus frequency for the series RLC circuit driven by a sine source, fitted with the magnitude model
+$A\,[1+(Q(\omega/\omega_0-\omega_0/\omega))^2]^{-1/2}$. The theoretical response computed from independently measured $L, R, C$ is shown as a green dashed curve. The best–fit parameters are
+$f_0=(5030.20 \pm 41.06)\,\text{Hz}$, $Q=2.56 \pm 0.11$, and an inter-channel scale factor $A=0.850 \pm 0.011$. The fit yields $\chi^2=17.84$ for $22$ degrees of freedom, giving a reduced chi-squared of $\chi^2_{\text{red}}=0.81$. \textbf{Bottom)} Residuals of the fit }
+    \label{fig:LCR_amp}
+\end{figure}
+
+
+We swept the drive frequency with the scope’s wave generator and measured $H(f)=V_R/V_{\text{in}}$ across the series resistor. The resistor was chosen so the standard series–$RLC$ transfer function applies directly.
+We collected $(f,V_{\text{in}},V_R)$ from $0.4$–$6$ kHz, propagated  voltage and frequency uncertainties, and plotted $H(f)$ with error bars (Fig.\ref{fig:LCR_amp}, top) and residuals (Fig.\ref{fig:LCR_amp}, bottom).
+We
+performed a  nonlinear fit on the resistor-branch magnitude
+\[
+H(\omega)=A\Bigl[1+\bigl(Q(\omega/\omega_0-\omega_0/\omega)\bigr)^2\Bigr]^{-1/2},
+\]
+report $f_0,Q,A$, $\chi^2$/$\chi^2_\text{red}$, and interpret residuals. Compare the fit to the ideal response computed from metered $L,C,R$.
+For a driven series–$RLC$, \emph{bandwidth encodes $Q$}; fitting the full curve uses all points with their uncertainties and is more precise than using only the half-power.
+The fit in Fig.\ref{fig:LCR_amp} yields
+\begin{align}
+f_{0,\text{amp}}&=(5030.20\pm41.06)\ \text{Hz}\\
+Q_{\text{fit}}&=2.56\pm0.11\\
+A&=0.850\pm0.011,
+\end{align}
+with $\chi^2=17.84$ for 22 dof ($\chi^2_\text{red}=0.81$). The ideal metered-parts curve (green dashed) peaks higher/narrower than the data, whereas the fit follows the measured, slightly broadened peak. Residuals are small in the wings and show a negative dip centered near resonance, indicating modest systematic broadening relative to the ideal model.
+The amplitude data has a $Q$ near $2.6$, consistent with the transient estimate and noticeably lower than the prediction from the metered components, signaling potential extra series loss in the real setup.
+\subsection{Phase vs Frequency}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{imgs/phase_freqex1.png}
+    \includegraphics[width=0.8\linewidth]{imgs/phase_freq_residualex1.png}
+    \caption{%
+\textbf{Top)} Measured phase response of the series LCR circuit versus frequency, fit with 
+$\phi(f)=\arctan\!\big(\,Q(\omega/\omega_0-\omega_0/\omega)\,\big)$ with $\phi_0=0$ (orange), and compared to the theoretical phase from measured $L,R,C$.
+The best-fit parameters are $f_0=(4901.8~\text{Hz})$ and $Q=2.69$.
+The fit yields $\chi^2=13.18$ for $22$ degrees of freedom, giving a reduced chi-squared of $\chi^2_{\text{red}}=0.60$.
+\textbf{Bottom)} Residuals of the fit with $\pm\sigma$ error bars
+}
+    \label{fig:lcr-phase}
+\end{figure}
+
+Using $V_{\text{in}}$ as the reference channel, we measured the phase of $V_R$ versus frequency and analyzed it with the same oscillator parameters used for the magnitude.
+We plotted $\theta(f)$ with error bars (Fig.\ref{fig:lcr-phase}, top) and the corresponding residuals (Fig.\ref{fig:lcr-phase}, bottom). A theoretical phase from metered $L,C,R$ is plotted for context.
+
+Fit the velocity phase model
+\[
+\phi(f)=\arctan\!\Bigl(Q\bigl(\omega/\omega_0-\omega_0/\omega\bigr)\Bigr)\quad(\phi_0=0),
+\]
+and report $f_0,Q$, $\chi^2$/$\chi^2_\text{red}$, and residuals; then check consistency with the amplitude-derived parameters.
+The same $(\omega_0,Q)$ that shapes the magnitude also governs the phase’s arctangent; agreement between the two serves as an internal cross-check.
+The phase fit (Fig.\ref{fig:lcr-phase}) returns
+\[
+f_{0}=4901.8\pm 8.8~\text{Hz},\qquad
+Q=2.690\pm0.075,
+\]
+Residuals are structureless within the quoted uncertainties and the fitted arctangent tracks the measured phase through the expected $+90^\circ\!\rightarrow 0^\circ\!\rightarrow -90^\circ$ transition near resonance.
+The phase-derived $f_{0}$ and $Q$ agree with those obtained from the amplitude fit and transient response within 1$\sigma$–2$\sigma$, providing an internal cross-check that the same $(\omega_{0},Q)$ shows   both magnitude and phase.
+Phase independently supports a $Q$ near $2.6$–$2.7$ and an $f_0$ close to $4.9$–$5.0$ kHz, consistent with the amplitude and transient analyses.
+
+\subsection{Analysis vs Theory}
+Using measured components,
+\[
+Q_{\text{theory}}=\frac{1}{R}\sqrt{\frac{L}{C}}=3.16\pm0.13,\]
+\[\qquad
+f_{0,\text{theory}}=\frac{1}{2\pi\sqrt{LC}}=4.74\pm0.20\ \text{kHz}.
+\]
+Because the wave generator behaves as a $50~\Omega$ source, our baseline uses $R_{\text{eff}}=R+50=1123~\Omega$, giving
+\[
+Q_{\text{theory,src}}=Q_{\text{theory,nom}}\frac{R}{R+50}\approx 3.02.
+\]
+Our  amplitude result from the amplitude ratio is $Q=2.56\pm0.11$,which is lower by $\Delta Q=-0.46$ ($\sim2.7\sigma$ with the same combined uncertainty). Interpreting $Q=(1/R_\text{eff})\sqrt{L/C}$, the data implies $R_\text{eff}\approx1326~\Omega$, $\Delta R_{\text{loss}}\approx 200~\Omega$ beyond $R+50~\Omega$, which is fairly consistent with inductor loss and small lead resistance at $\sim5$ kHz. The depressed peak in Fig.\ref{fig:LCR_amp} and its residual dip at resonance are  good evidence of added series loss.
+\subsection{Mechanical Oscillator Analysis}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{imgs/tuning fork_plot.png}
+    \includegraphics[width=0.8\linewidth]{imgs/tuningfork_residuals.png}
+\caption{%
+\textbf{Top)} Ring-down of the tuning fork fit with underdamped model
+$y(t)=A\,e^{-t/\tau}\cos(\omega t)$ The best-fit parameters are
+$f=(75.379~\text{Hz})$ ($\omega=473.623~\text{rad/s}$), $\tau=0.581~\text{s}$,
+and $Q=137.7$. The fit
+yields $\chi^2=1229.68$ for $1995$ degrees of freedom and a reduced chi-squared
+of $\chi^2_{\text{red}}=0.616$
+\textbf{Bottom)} Residuals of the fit.
+}
+
+    \label{fig:ringedown}
+\end{figure}
+
+
+Figure \ref{fig:stef_powfit} provides the fit for our intensity and temperature data, yielding an exponent of $4.62 \pm 0.02$ with reasonable goodness of fit and patternless residuals. The exponent is higher than expected, indicating that our intensities are increasing at higher rate, or we are underestimating our bulb temperatures. 
+\begin{figure}[h]
+    \centering
+     \includegraphics[width=0.8\linewidth]{imgs/mech_osc_amplitude.png}
+    \includegraphics[width=0.8\linewidth]{imgs/amp_rat_mech_residual.png}
+   
+  \caption{(Top) Measured phase response of the driven resonator versus frequency, fitted with $\phi(f) = -\tan^{-1}\!\big[\,Q\big(\omega/\omega_{0} - \omega_{0}/\omega\big)\big]$. The best–fit parameters are $f_{0} = (44.4520 \pm 0.0849)\,\mathrm{kHz}$ and $Q = 15.56 \pm 1.21$. The fit achieves a reduced chi–squared of $\chi^{2}_{\mathrm{red}} = 0.689$ with $22$ degrees of freedom. (Bottom) Residuals of the fit versus frequency}
+
+
+    \label{fig:stef_powfit}
+\end{figure}
+The ambient light in the room, if constant throughout data collection, would contribute a global shift in the intensity spectra we collect that may not be accounted for when restricting the integral to the peak region. This would additionally lead to higher intensity readings causing our power law fit to overestimate the Stefan-Boltzmann constant. This could be countered by including a vertical shift in the fitting function, however, when this was attempted, we found the quality of the fit decreased significantly. Future experiments would benefit from collecting data in a certified dark room to minimize ambient light effects. Further, the ambient light was not constant with doors being opened and closed letting more light in during some scans than others. Outside of outlier points, this would contribute noise to the intensity readings.
+
+\begin{figure}[h]
+    \centering
+     \includegraphics[width=0.8\linewidth]{imgs/Amp)_ratio_tuned_fork.png}
+    \includegraphics[width=0.8\linewidth]{imgs/tunedfork(amp_ratio).png}
+   
+  \caption{(Top) Measured amplitude ratio $V_r/V_{\mathrm{in}}$ of the driven mechanical (pickup–coil) resonator (blue) versus frequency, fitted with 
+$R(f) = A / \sqrt{1 + Q^{2} \left( (\omega/\omega_0) - (\omega_0/\omega) \right)^{2} }, \quad \omega = 2\pi f$\\
+The best–fit parameters are $f_0=(44.506 \pm 0.308)\,\mathrm{kHz}$, $Q=14.5 \pm 3.1$, and $A=0.577 \pm 0.088$.
+Using the tuned uncertainties, the fit achieves a reduced chi–squared of $\chi^2_{\mathrm{red}}=1.20$ with $21$ degrees of freedom.
+(Bottom) Residuals of the fit versus frequency showing random scatter about zero}
+
+    \label{fig:stef_powfit}
+\end{figure}\begin{figure}[h]
+    \centering
+     \includegraphics[width=0.8\linewidth]{imgs/phase(tuned fork).png}
+    \includegraphics[width=0.8\linewidth]{imgs/phase_residual(tuned fork).png}
+   
+\caption{(Top) Measured phase response of the driven resonator versus frequency, fitted with  $\phi(f) = -\tan^{-1}\!\big[\,Q\big(\omega/\omega_{0} - \omega_{0}/\omega\big)\big]$ (orange). The best–fit parameters are $f_{0} = (44.4520 \pm 0.0849)\,\mathrm{kHz}$ and $Q = 15.56 \pm 1.21$. The fit achieves a reduced chi–squared of $\chi^{2}_{\mathrm{red}} = 0.689$ with $22$ degrees of freedom. (Bottom) Residuals of the fit versus frequency}
+
+\end{figure}
+
+
+
+
+\section{Conclusion}
+In this experiment, we used an incandescent tungsten filament light bulb to examine its approximate blackbody behaviour over a range of temperatures. Our primary aim was to verify Wien’s Displacement Law by tracking how the peak emission wavelength shifts as the filament temperature changes, and we also assessed whether the overall intensity follows the Stefan–Boltzmann relationship. To do this, we varied the applied voltage, measured the electrical resistance to estimate temperature, and recorded the emission spectrum using a prism-based spectrophotometer. By fitting the peak wavelength of each  measured spectrum, we confirmed that the emission shifts with temperature in a manner consistent with Wien's Displacement Law. However, we overestimated the Wien constant as $(3.8 \pm 0.3)~\mathrm{m\cdot K}$ when compared to the literature value $2.898 \times 10^{-3}\unit{m \cdot K}$. Moreover, our results showed that the overall light intensity increases with temperature following a power law of $T^{4.62 \pm 0.02}$, in comparison with the $T^{4}$ dependence predicted by the Stefan-Boltzmann Law  Despite some limitations, such as incomplete wavelength coverage and the need for more precise spectrometer calibration, our results affirm the tungsten filament’s close conformity to blackbody behavior.
+
+
+
+
+%	 REFERENCES
+%----------------------------------------------------------------------------------------
+
+\printbibliography % Output the bibliography
+
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+
+\appendix
+\section*{Appendix}
+\renewcommand{\thesubsection}{\Roman{subsection}}
+\textbf{Statement of AI Usage} Used Vscode automatic code suggestions from Github Copilot and Coedeium during analysis to help write out functions and debug. 
+
+\subsection{Wavelength Uncertainty Propagation}
+\label{appendix:wavelength-uncertainty-prop}
+To determine the uncertainty in wavelength, $u(\lambda)$, we propagate equation \ref{eqn:lambda(theta)}, using experimental uncertainties for $\theta$ to get 
+\begin{equation}
+    u(\lambda) = \ab|\diffp{\lambda}{\theta} u(\theta)|
+\end{equation}
+We have 
+\begin{align*}
+    \diffp{\lambda}{n}
+    &= \frac12\ab(\frac{A}{n - B})^{-1/2} \frac{-A}{(n - B)^2} = \frac{-\lambda^4}{2A\lambda} = -\frac{\lambda^3}{2A}
+\end{align*}
+and 
+\begin{align*}
+    \diffp{n}{\theta}
+    &= \frac1{2n}\cdot 2\ab(\frac2{\sqrt3}\sin\theta + \frac12)\cdot \frac2{\sqrt3}\cos\theta \\ 
+    &= \frac{2\cos\theta\sqrt{n^2 - \frac34}}{n\sqrt 3}
+\end{align*}
+Together, we get 
+\begin{align}
+\label{eqn:dlambda_dtheta}
+    \diffp{\lambda}{\theta} &= \diffp{\lambda}{n} \diffp{n}{\theta} = \frac{-\lambda^3\cos\theta\sqrt{n^2 - \frac34}}{nA\sqrt 3}
+\end{align}
+
+
+
+\subsection{Supplementary Figures}
+\label{appendix:supp-figs}
+
+
+
+
+\end{document}
